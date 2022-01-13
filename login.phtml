@@ -1,3 +1,6 @@
+<?php
+require("session_helper.php");
+flash('login') ?>
 
 <html>
 <head>
@@ -9,7 +12,7 @@
 <body>
 <div class="login">
         <h1>Login</h1>
-        <form action="/login.php" method="post">
+        <form action="/Users.php" method="post">
             <input type="hidden" name="type" value="login" >
             <label for="username">
                 <i class="fas fa-user"></i>
@@ -25,6 +28,4 @@
 </div>
 </body>
 </html>
-
-<?php
 
