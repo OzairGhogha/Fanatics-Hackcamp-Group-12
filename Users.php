@@ -37,7 +37,7 @@ class Users
         }
         //password length must be <6
         if(strlen($data['password']) < 6){
-            flash("register", "Invalid password");
+            flash("register", "Invalid password - Must be < 6 characters");
             header("Location:../signup.php");
             exit();
 

@@ -8,7 +8,7 @@ class database {
     private $host = 'poseidon.salford.ac.uk';
     private $dbName = 'agd743_hackcamp';
 
-    protected static $_dbInstance = null;
+
     protected $_dbHandle;
 
 
@@ -27,10 +27,6 @@ class database {
             $this->error = $e->getMessage();
             echo $this->error;
         }
-    }
-
-    public function getdbConnection() {
-        return $this->_dbHandle; // returns the PDO handle to be used elsewhere
     }
 
     public function __destruct() {
