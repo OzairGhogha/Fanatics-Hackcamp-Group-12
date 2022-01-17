@@ -24,35 +24,35 @@ class Users
         if(empty($data['username']) || empty($data['lastname']) ||
             empty($data['password']) || empty($data['passwordrepeat'])){
             flash("register", "Please fill out all inputs");
-            header("Location:../signup.php");
+            header("Location:../dashboard-signup.php");
             exit();
 
         }
         //valid char
         if(!preg_match("/^[a-zA-Z0-9]*$/", $data['username'])) {
             flash("register", "Invalid username");
-            header("Location:../signup.php");
+            header("Location:../dashboard-signup.php");
             exit();
 
         }
         //password length must be <6
         if(strlen($data['password']) < 6){
             flash("register", "Invalid password - Must be < 6 characters");
-            header("Location:../signup.php");
+            header("Location:../dashboard-signup.php");
             exit();
 
         }
         //check if passwords match
         else if($data['password'] !== $data['passwordrepeat']){
             flash("register", "Passwords don't match");
-            header("Location:../signup.php");
+            header("Location:../dashboard-signup.php");
             exit();
 
         }
         //user with existing username in database
         if($this->userModel->findUserByUsername($data['username'])){
             flash("register", "Username already taken");
-            header("Location:../signup.php");
+            header("Location:../dashboard-signup.php");
             exit();
 
         }
@@ -61,7 +61,8 @@ class Users
         $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
         if($this->userModel->register($data)){
-            header("Location:../login.php");
+            flash("register", "User successfully created");
+            header("Location:../dashboard-signup.php");
             exit();
         }else{
             die("Something went wrong");
@@ -112,7 +113,7 @@ class Users
         $_SESSION['id'] = $user->id;
         $_SESSION['firstname'] = $user->firstname;
         $_SESSION['username'] = $user->username;
-        header("Location:../index.php");
+        header("Location:../dashboard-home.php");
         exit();
 
     }
