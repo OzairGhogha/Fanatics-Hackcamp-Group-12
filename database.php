@@ -74,4 +74,8 @@ class database {
     public function rowCount(){
         return $this->stmt->rowCount();
     }
+
+    public function getdbConnection() {
+        return $this->_dbHandle; // returns the PDO handle to be used elsewhere
+    }
 }

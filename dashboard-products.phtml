@@ -1,9 +1,13 @@
 <?php
-
 session_start();
 if (!isset($_SESSION['id']))
     header("Location: ../login.php");
+require_once("ProductsDataSet.php");
+require_once("dashboard-products.php");
+
 ?>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -31,7 +35,6 @@ if (!isset($_SESSION['id']))
     </a>
 
     <!--    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">-->
-
 </nav>
 
 <div class="container-fluid">
@@ -52,13 +55,13 @@ if (!isset($_SESSION['id']))
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="dashboard-products.php">
+                        <a class="nav-link active" href="dashboard-products.php">
                             <span data-feather="shopping-cart"></span>
                             Products
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">
+                        <a class="nav-link" href="dashboard-signup.php">
                             <span data-feather="users"></span>
                             Add New Admin
                         </a>
@@ -111,66 +114,57 @@ if (!isset($_SESSION['id']))
                 </ul>
             </div>
         </nav>
+    </div>
+</div>
 
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+    <br>
+    <form method="post" action="/dashboard-products.php">
+        <h3>Search for products</h3>
+        <label>
+            <input type="text" name="search" required/>
+        </label>
+        <input type="submit" value="Search"/>
+    </form>
 
-        <?php
-        require('session_helper.php');
+<table class="table table-hover col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+    <thead>
+    <tr><th>Product ID</th><th>Product Name</th><th>Product Description</th><th>Product Size</th><th>Image</th><th>Product Quantity</th><th>Product Price</th></tr>
 
-        flash('register')
-        ?>
+    </thead>
+    <tbody>
 
-        <head>
-            <meta charset="utf-8">
-            <title>Sign-Up</title>
-            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-        </head>
-        <body>
-        <div class="login">
-            <h1>Sign-Up</h1>
-            <form action="/Users.php" method="post">
-                <input type = "hidden" name="type" value="register" >
-                <label for="First Name">
-                    <i class="fas fa-id-card"></i>
-                </label>
-                <input type="text" name="firstname" placeholder="Enter First Name" id="firstname" required>
-                <label for="Last Name">
-                    <i class="fas fa-id-card"></i>
-                </label>
-                <input type="text" name="lastname" placeholder="Enter Last Name" id="lastname" required>
-                <label for="username">
-                    <i class="fas fa-user"></i>
-                </label>
-                <input type="text" name="username" placeholder="Enter Username" id="username" required>
-                <label for="password">
-                    <i class="fas fa-lock"></i>
-                </label>
-                <input type="password" name="password" placeholder="Enter Password" id="password" required>
-                <label for="password">
-                    <i class="fas fa-lock"></i>
-                </label>
-                <input type="password" name="passwordrepeat" placeholder="Confirm Password" id="password" required>
-                <input type="submit" value="Sign-Up">
-            </form>
-        </div>
-        </body>
+    <?php
+       //output database fields in table using accessors
 
+            foreach ($view->productsDataSet as $productData) {
+            echo '<tr> <td>' . $productData->getProductID() .
+                '</td> <td>' . $productData->getProductName() .
+                '</td> <td>' . $productData->getProductDescription() .
+                '</td> <td>' . $productData->getProductSize() .
+                '</td> <td>' . '<img src="images/' . $productData->getProductPhotoName() . '"alt="No-Image"/>' .
+                '</td> <td>' . $productData->getProductQuantity() .
+                '</td> <td>' . $productData->getProductPrice() .
+
+                '</td> </td></tr>';
+        }
+             ?>
+    </tbody>
+    </table>
+</form>
 
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
 <script src="js/vendor/popper.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/product.js"></script>
 
 <!-- Icons -->
 <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
 <script>
     feather.replace()
 </script>
-
-</body>
-</html>

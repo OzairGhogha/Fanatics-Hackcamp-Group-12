@@ -123,6 +123,7 @@ class Users
         unset($_SESSION['id']);
         unset($_SESSION['firstname']);
         unset($_SESSION['username']);
+
         session_destroy();
         header("Location:../index.php");
         exit();

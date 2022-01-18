@@ -29,7 +29,6 @@ if(!isset($_SESSION['id']))
 
 <!--    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">-->
 
->
 </nav>
 
 <div class="container-fluid">
@@ -50,7 +49,7 @@ if(!isset($_SESSION['id']))
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="dashboard-products.php">
                             <span data-feather="shopping-cart"></span>
                             Products
                         </a>
@@ -112,7 +111,11 @@ if(!isset($_SESSION['id']))
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                <h1 class="h2">Dashboard</h1>
+                <h1 class="h2">Welcome, <?php if(isset($_SESSION['id'])){
+                        //display session username
+                        echo explode(" ", $_SESSION['firstname'])[0];
+                    }
+                    ?></h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group mr-2">
                     </div>
@@ -276,7 +279,7 @@ if(!isset($_SESSION['id']))
         data: {
             labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
             datasets: [{
-                data: [15339, 21345, 18483, 24003, 23489, 24092, 12034],
+                data: [15339, 21345, 18483, 24003, 23489, 24092, 28034],
                 lineTension: 0,
                 backgroundColor: 'transparent',
                 borderColor: '#ff5700',
