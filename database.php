@@ -8,7 +8,7 @@ class database {
     private $host = 'poseidon.salford.ac.uk';
     private $dbName = 'agd743_hackcamp';
 
-
+    protected static $_dbInstance = null;
     protected $_dbHandle;
 
 

@@ -117,42 +117,215 @@ require_once("dashboard-products.php");
     </div>
 </div>
 
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-    <br>
-    <form method="post" action="/dashboard-products.php">
-        <h3>Search for products</h3>
-        <label>
-            <input type="text" name="search" required/>
-        </label>
-        <input type="submit" value="Search"/>
-    </form>
+
 
 <table class="table table-hover col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
     <thead>
-    <tr><th>Product ID</th><th>Product Name</th><th>Product Description</th><th>Product Size</th><th>Image</th><th>Product Quantity</th><th>Product Price</th></tr>
+    <tr>
+        <th>Product ID</th>
+        <th>Product Name</th>
+        <th>Product Description</th>
+        <th>Product Size</th>
+        <th>Image</th>
+        <th>Product Quantity</th>
+        <th>Product Price</th>
+        <th>Status</th>
 
+    </tr>
     </thead>
     <tbody>
 
-    <?php
-       //output database fields in table using accessors
 
-            foreach ($view->productsDataSet as $productData) {
-            echo '<tr> <td>' . $productData->getProductID() .
-                '</td> <td>' . $productData->getProductName() .
-                '</td> <td>' . $productData->getProductDescription() .
-                '</td> <td>' . $productData->getProductSize() .
-                '</td> <td>' . '<img src="images/' . $productData->getProductPhotoName() . '"alt="No-Image"/>' .
-                '</td> <td>' . $productData->getProductQuantity() .
-                '</td> <td>' . $productData->getProductPrice() .
 
-                '</td> </td></tr>';
+    <div class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+        <a href="#" data-toggle="modal" data-target="#add_product_modal" class="btn btn-primary btn-sm">Add Product</a>
+    </div>
+
+    <div class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+        <a href="#" data-toggle="modal" data-target="#edit_product_modal" class="btn btn-primary btn-sm">Delete Product</a>
+    </div>
+
+    <!-- Edit Product Modal start -->
+    <form action = "dashboard-products.php" method = "post">
+        <div class="modal fade" id="edit_product_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Delete Product</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="edit-product-form" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>Product ID</label>
+                                        <input type="text" name="product_id" class="form-control" placeholder="Enter Product ID">
+                                    </div>
+                                </div>
+
+                                <input type="hidden" name="add_product" value="1">
+                                <input type="submit" class="btn btn-primary" name="submit2" value="Submit">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!-- Edit Product Modal end -->
+
+    <!-- Add Product Modal start -->
+    <form action = "dashboard-products.php" method = "post">
+    <div class="modal fade" id="add_product_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-product-form" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Product Name</label>
+                                    <input type="text" name="product_name" class="form-control" placeholder="Enter Product Name">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Size</label>
+                                    <select class="form-control size_list" name="product_size">
+                                        <option value="">Select Size</option>
+                                        <option value="XS">XS</option>
+                                        <option value="S">S</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Product Description</label>
+                                    <textarea class="form-control" name="product_description" placeholder="Enter Product Description"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Product Quantity</label>
+                                    <input type="number" name="product_quantity" class="form-control" placeholder="Enter Product Quantity">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Product Price</label>
+                                    <input type="number" name="product_price" class="form-control" placeholder="Enter Product Price">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Product Image <small>(format: jpg, jpeg, png)</small></label>
+                                    <input type="file" name="product_image" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <select class="form-control status_list" name="product_status">
+                                        <option value="">Select Status</option>
+                                        <option value="Enabled">Enabled</option>
+                                        <option value="Disabled">Disabled</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <input type="hidden" name="add_product" value="1">
+                            <input type="submit" class="btn btn-primary" name="submit" value="Submit">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+    <!-- Add Product Modal end -->
+
+
+<!--    --><?php
+
+
+$conn = mysqli_connect('poseidon.salford.ac.uk','agd743','Gorvi402','agd743_hackcamp');
+$sql = ("SELECT * FROM ProductInformation");
+$result = $conn->query($sql);
+if(!isset($_POST['search'])) {
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr><td>" . $row["product_id"] . "</td><td>" . $row["product_name"] . "</td><td>" . $row["product_description"] . "</td><td>" . $row["product_size"] . "</td><td>" . $row["product_image"] . "</td><td>" . $row["product_quantity"] . "</td><td>" . $row["product_price"] . "</td><td>" . $row["product_enabled"] . "</td>";
         }
-             ?>
+    } else {
+        echo "No Results";
+    }
+}
+if(isset($_POST['submit']))
+    {
+        $name = $_POST['product_name'];
+        $price = $_POST['product_price'];
+        $image = $_POST['product_image'];
+        $size = $_POST['product_size'];
+        $quantity = $_POST['product_quantity'];
+        $description = $_POST['product_description'];
+        $status = $_POST['product_status'];
+        $sql = "INSERT INTO ProductInformation (product_name,product_price,product_image,product_size,product_quantity,product_description,product_enabled) VALUES ('$name','$price','$image','$size','$quantity','$description','$status')";
+
+        if (mysqli_query($conn, $sql)) {
+            echo "New product has been added successfully !";
+        } else {
+            echo "Error: " . $sql . ":-" . mysqli_error($conn);
+        }
+        mysqli_close($conn);
+    }
+if(isset($_POST['submit2']))
+{
+    $id = $_POST['product_id'];
+    $sql = "DELETE FROM ProductInformation WHERE product_id = '$id'";
+    if (mysqli_query($conn, $sql)) {
+        echo "Product has been deleted successfully !";
+    } else {
+        echo "Error: " . $sql . ":-" . mysqli_error($conn);
+    }
+    mysqli_close($conn);
+}
+
+
+
+//include_once("database.php");
+//       //output database fields in table using accessors
+//
+//            foreach ($view->productsDataSet as $productData) {
+//            echo '<tr> <td>' . $productData->getProductID() .
+//                '</td> <td>' . $productData->getProductName() .
+//                '</td> <td>' . $productData->getProductDescription() .
+//                '</td> <td>' . $productData->getProductSize() .
+//                '</td> <td>' . '<img src="images/' . $productData->getProductPhotoName() . '"alt="No-Image"/>' .
+//                '</td> <td>' . $productData->getProductQuantity() .
+//                '</td> <td>' . $productData->getProductPrice() .
+//
+//                '</td> </td></tr>';
+//        }
+//             ?>
     </tbody>
     </table>
 </form>
 
+
+
+</body>
+<!-- Add Product Modal end -->
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
