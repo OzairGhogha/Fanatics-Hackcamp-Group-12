@@ -305,26 +305,32 @@ require_once("dashboard-products.php");
     </form>
     <!-- Add Product Modal end -->
 
+    <!-- Search -->
+    <div class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-3">
+    <form action="dashboard-products.php" method="post">
+        Search <input type="text" name="search"><br>
+        <input type ="submit">
+    </form>
+    </div>
+
 
 <!--    --><?php
 
 
 $conn = mysqli_connect('poseidon.salford.ac.uk','agd743','Gorvi402','agd743_hackcamp');
 
-
-$sql = ("SELECT * FROM ProductInformation");
-$result = $conn->query($sql);
+if (!isset($_POST['search'])) {
+    $sql = ("SELECT * FROM ProductInformation");
+    $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            echo "<tr><td>" . $row["product_id"] . "</td><td>" . $row["product_name"] . "</td><td>" . $row["product_description"] . "</td><td>" . $row["product_size"] . "</td><td>" . "<img src=images/".$row['product_image'].' width=100px height="100px">' . "</td><td>" . $row["product_quantity"] . "</td><td>" . $row["product_price"] . "</td><td>" . $row["product_enabled"] . "</td>";
+            echo "<tr><td>" . $row["product_id"] . "</td><td>" . $row["product_name"] . "</td><td>" . $row["product_description"] . "</td><td>" . $row["product_size"] . "</td><td>" . "<img src=images/" . $row['product_image'] . ' width=100px height="100px">' . "</td><td>" . $row["product_quantity"] . "</td><td>" . $row["product_price"] . "</td><td>" . $row["product_enabled"] . "</td>";
         }
     } else {
         echo "No Results";
 
+    }
 }
-
-
-
 
 if(isset($_POST['submit'])) {
 
@@ -356,11 +362,21 @@ if(isset($_POST['submit'])) {
     }
     mysqli_close($conn);
 
-
-
-
 }
 
+if(isset($_POST['search'])) {
+    $searchText = $_POST['search'];
+    $sql = ("SELECT * FROM ProductInformation WHERE product_id LIKE '" . $searchText . "' OR product_name LIKE '" . $searchText . "' or product_description LIKE '" . $searchText . "' or product_price LIKE '" . $searchText . "'");
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr><td>" . $row["product_id"] . "</td><td>" . $row["product_name"] . "</td><td>" . $row["product_description"] . "</td><td>" . $row["product_size"] . "</td><td>" . "<img src=images/" . $row['product_image'] . ' width=100px height="100px">' . "</td><td>" . $row["product_quantity"] . "</td><td>" . $row["product_price"] . "</td><td>" . $row["product_enabled"] . "</td>";
+        }
+    } else {
+        echo "No Results";
+
+    }
+}
 
 if(isset($_POST['submit2']))
 {
@@ -420,6 +436,7 @@ if(isset($_POST['submit3']))
 <script src="js/vendor/popper.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/product.js"></script>
+
 
 <!-- Icons -->
 <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
