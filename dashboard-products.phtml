@@ -42,16 +42,28 @@ require_once("dashboard-products.php");
         <nav class="col-md-2 d-none d-md-block bg-light sidebar">
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>Home</span>
+                        <a class="d-flex align-items-center text-muted" href="#">
+                            <span data-feather="chevron-down"></span>
+                        </a>
+                    </h6>
                     <li class="nav-item">
                         <a class="nav-link" href="dashboard-home.php">
                             <span data-feather="home"></span>
                             Dashboard Home <span class="sr-only"></span>
                         </a>
                     </li>
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>Products</span>
+                        <a class="d-flex align-items-center text-muted" href="#">
+                            <span data-feather="chevron-down"></span>
+                        </a>
+                    </h6>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="dashboard-audit.php">
                             <span data-feather="file"></span>
-                            Test
+                            Product Audit Log
                         </a>
                     </li>
                     <li class="nav-item">
@@ -60,55 +72,16 @@ require_once("dashboard-products.php");
                             Products
                         </a>
                     </li>
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>Users</span>
+                        <a class="d-flex align-items-center text-muted" href="#">
+                            <span data-feather="chevron-down"></span>
+                        </a>
+                    </h6>
                     <li class="nav-item">
                         <a class="nav-link" href="dashboard-signup.php">
                             <span data-feather="users"></span>
                             Add New Admin
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="bar-chart-2"></span>
-                            Test
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="layers"></span>
-                            Test
-                        </a>
-                    </li>
-                </ul>
-
-                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span>Test Category</span>
-                    <a class="d-flex align-items-center text-muted" href="#">
-                        <span data-feather="plus-circle"></span>
-                    </a>
-                </h6>
-                <ul class="nav flex-column mb-2">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Test
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Test
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Test
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Test
                         </a>
                     </li>
                 </ul>
@@ -315,8 +288,8 @@ require_once("dashboard-products.php");
 
 
 <!--    --><?php
-
-
+    date_default_timezone_set("Europe/London");
+    $mysqltime = date ('Y-m-d H:i:s');
 $conn = mysqli_connect('poseidon.salford.ac.uk','agd743','Gorvi402','agd743_hackcamp');
 
 if (!isset($_POST['search'])) {
@@ -332,11 +305,11 @@ if (!isset($_POST['search'])) {
     }
 }
 
-if(isset($_POST['submit'])) {
 
+if(isset($_POST['submit'])) {
     $filename = $_FILES["product_image"]["name"];
     $tempname = $_FILES["product_image"]["tmp_name"];
-    $folder = "images/".$filename;
+    $folder = "images/" . $filename;
     $name = $_POST['product_name'];
     $price = $_POST['product_price'];
     //$file = $_POST['product_image'];
@@ -349,24 +322,29 @@ if(isset($_POST['submit'])) {
 
     $sql = "INSERT INTO ProductInformation (product_name,product_price,product_image,product_size,product_quantity,product_description,product_enabled) VALUES ('$name','$price','$filename','$size','$quantity','$Str','$status')";
 
-    if (mysqli_query($conn, $sql)) {
-        echo '<script>alert("Product has been successfully added - refresh page to view changes")</script>';
-    } else {
-        echo "Error: " . $sql . ":-" . mysqli_error($conn);
-    }
-    // Now let's move the uploaded image into the folder: image
-    if (move_uploaded_file($tempname, $folder))  {
-        $msg = "Image uploaded successfully";
-    }else{
-        $msg = "Failed to upload image";
-    }
-    mysqli_close($conn);
 
-}
+
+    if (mysqli_query($conn, $sql)) {
+            $last_id = $conn->insert_id;
+            echo '<script>alert("Product has been successfully added - refresh page to view changes")</script>';
+        } else {
+            echo "Error: " . $sql . ":-" . mysqli_error($conn);
+        }
+        // Now let's move the uploaded image into the folder: image
+        if (move_uploaded_file($tempname, $folder)) {
+            $msg = "Image uploaded successfully";
+        } else {
+            $msg = "Failed to upload image";
+        }
+    $sqlAudit = "INSERT INTO audit (user,time,changeType,product) VALUES ('{$_SESSION['firstname']}', '$mysqltime','Added','$last_id') ";
+    (mysqli_query($conn, $sqlAudit));
+        mysqli_close($conn);
+
+    }
 
 if(isset($_POST['search'])) {
     $searchText = $_POST['search'];
-    $sql = ("SELECT * FROM ProductInformation WHERE product_id LIKE '" . $searchText . "' OR product_name LIKE '" . $searchText . "' or product_description LIKE '" . $searchText . "' or product_price LIKE '" . $searchText . "'");
+    $sql = ("SELECT * FROM ProductInformation WHERE product_id LIKE '" . $searchText . "' OR product_name LIKE '" . $searchText . "' or product_description LIKE '" . $searchText . "' or product_price LIKE '" . $searchText . "' OR product_enabled LIKE '" . $searchText ."' ");
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
@@ -380,14 +358,20 @@ if(isset($_POST['search'])) {
 
 if(isset($_POST['submit2']))
 {
+
     $id = $_POST['product_id'];
     $sql = "DELETE FROM ProductInformation WHERE product_id = '$id'";
+
+    $sqlAudit = "INSERT INTO audit (user,time,changeType,product) VALUES ('{$_SESSION['firstname']}', '$mysqltime','Deleted','$id') ";
+
     if (mysqli_query($conn, $sql)) {
         echo '<script>alert("Product has been successfully deleted - refresh page to view changes")</script>';
     } else {
         echo "Error: " . $sql . ":-" . mysqli_error($conn);
     }
+    (mysqli_query($conn, $sqlAudit));
     mysqli_close($conn);
+
 }
 
 if(isset($_POST['submit3']))
@@ -395,11 +379,15 @@ if(isset($_POST['submit3']))
         $id = $_POST['product_id'];
         $status = $_POST['product_status'];
         $sql = "UPDATE ProductInformation SET product_enabled = '$status' WHERE product_id = '$id'";
+
+        $sqlAudit = "INSERT INTO audit (user,time,changeType,product) VALUES ('{$_SESSION['firstname']}', '$mysqltime','$status','$id') ";
+
         if (mysqli_query($conn, $sql)) {
             echo '<script>alert("Product has been successfully edited - refresh page to view changes")</script>';
         } else {
             echo "Error: " . $sql . ":-" . mysqli_error($conn);
         }
+        (mysqli_query($conn, $sqlAudit));
         mysqli_close($conn);
     }
 

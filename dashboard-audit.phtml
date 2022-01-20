@@ -1,8 +1,9 @@
 <?php
+
 session_start();
-if(!isset($_SESSION['id']))
+if (!isset($_SESSION['id']))
     header("Location: ../login.php");
-    ?>
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -24,10 +25,12 @@ if(!isset($_SESSION['id']))
 <body>
 <nav class="navbar navbar-dark sticky-top bg-white border-bottom border-dark flex-md-nowrap p-0">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
-    <img src="images/logo.png" width = "180" height="35" </a>
-    <a href="/Users.php?q=logout"<button class="btn btn-outline-dark" type="button">Log-Out</button> </a>
+        <img src="images/logo.png" width="180" height="35" </a>
+    <a href="/Users.php?q=logout"
+    <button class="btn btn-outline-dark" type="button">Log-Out</button>
+    </a>
 
-<!--    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">-->
+    <!--    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">-->
 
 </nav>
 
@@ -43,7 +46,7 @@ if(!isset($_SESSION['id']))
                         </a>
                     </h6>
                     <li class="nav-item">
-                        <a class="nav-link active" href="dashboard-home.php">
+                        <a class="nav-link" href="dashboard-home.php">
                             <span data-feather="home"></span>
                             Dashboard Home <span class="sr-only"></span>
                         </a>
@@ -55,7 +58,7 @@ if(!isset($_SESSION['id']))
                         </a>
                     </h6>
                     <li class="nav-item">
-                        <a class="nav-link" href="dashboard-audit.php">
+                        <a class="nav-link active" href="dashboard-audit.php">
                             <span data-feather="file"></span>
                             Product Audit Log
                         </a>
@@ -81,63 +84,48 @@ if(!isset($_SESSION['id']))
                 </ul>
             </div>
         </nav>
+    </div>
+</div>
 
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                <h1 class="h2">Welcome, <?php if(isset($_SESSION['id'])){
-                        //display session username
-                        echo explode(" ", $_SESSION['firstname'])[0];
-                    }
-                    ?></h1>
-                <div class="btn-toolbar mb-2 mb-md-0">
-                    <div class="btn-group mr-2">
-                    </div>
-                </div>
-            </div>
-
-            <canvas class="my-4" id="myChart" width="900" height="380"></canvas>
-
-            <h2>Lowest Stock</h2>
-
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>Product ID</th>
-                    <th>Product Name</th>
-                    <th>Product Size</th>
-                    <th>Image</th>
-                    <th>Product Quantity</th>
-                    <th>Status</th>
-
-                </tr>
-                </thead>
-                <tbody>
+<table class="table table-hover col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+    <thead>
+    <tr>
+        <th>Audit ID</th>
+        <th>User</th>
+        <th>Time</th>
+        <th>Change Type</th>
+        <th>Product ID</th>
 
 
-                <?php
+    </tr>
+    </thead>
+    <tbody>
+</body>
+</html>
 
+<?php
 
 $conn = mysqli_connect('poseidon.salford.ac.uk','agd743','Gorvi402','agd743_hackcamp');
-$sql = ("SELECT * FROM ProductInformation ORDER BY product_quantity ASC ");
-$result = $conn->query($sql);
+
+    $sql = ("SELECT * FROM audit ORDER BY time DESC ");
+    $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            echo "<tr><td>" . $row["product_id"] . "</td><td>" . $row["product_name"] . "</td><td>" . $row["product_size"] . "</td><td>" . "<img src=images/".$row['product_image'].' width=100px height="100px">' . "</td><td>" . $row["product_quantity"] . "</td><td>" . $row["product_enabled"] . "</td>";
+            echo "<tr><td>" . $row["id"] . "</td><td>" . $row["user"] . "</td><td>" . $row["time"] . "</td><td>" . $row["changeType"] ."</td><td>" . $row["product"] . "</td>";
         }
     } else {
         echo "No Results";
+    }
 
-}
-  ?>
-            </div>
-        </main>
-    </div>
-</div>
+
+?>
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
 <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
 <script src="js/vendor/popper.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
@@ -148,36 +136,6 @@ $result = $conn->query($sql);
     feather.replace()
 </script>
 
-<!-- Graphs -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
-<script>
-    var ctx = document.getElementById("myChart");
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-            datasets: [{
-                data: [15339, 21345, 18483, 24003, 23489, 24092, 28034],
-                lineTension: 0,
-                backgroundColor: 'transparent',
-                borderColor: '#ff5700',
-                borderWidth: 4,
-                pointBackgroundColor: '#ff2600'
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: false
-                    }
-                }]
-            },
-            legend: {
-                display: false,
-            }
-        }
-    });
-</script>
-</body>
-</html>
+
+
+
