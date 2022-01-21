@@ -95,9 +95,15 @@ if(!isset($_SESSION['id']))
                 </div>
             </div>
 
-            <canvas class="my-4" id="myChart" width="900" height="380"></canvas>
 
-            <h2>Lowest Stock</h2>
+<!--            <canvas id="myChart" width="900" height="380"></canvas>-->
+            <div style="width:100%;height:50%;text-align:center">
+                <h2 class="page-header" >Stock Levels</h2>
+                <div>Products Ordered By Lowest </div>
+                <canvas  id="chartjs_bar"></canvas>
+            </div>
+
+            <h2>Table of Lowest Stock</h2>
 
             <table class="table table-hover">
                 <thead>
@@ -108,7 +114,6 @@ if(!isset($_SESSION['id']))
                     <th>Image</th>
                     <th>Product Quantity</th>
                     <th>Status</th>
-
                 </tr>
                 </thead>
                 <tbody>
@@ -128,6 +133,15 @@ $result = $conn->query($sql);
         echo "No Results";
 
 }
+                $sql ="SELECT * FROM ProductInformation ORDER BY product_quantity ASC ";
+                $result = mysqli_query($conn,$sql);
+                $chart_data="";
+                while ($row = mysqli_fetch_array($result)) {
+
+                    $productname[]  = $row['product_id']  ;
+                    $stock[] = $row['product_quantity'];
+                }
+
   ?>
             </div>
         </main>
@@ -141,43 +155,50 @@ $result = $conn->query($sql);
 <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
 <script src="js/vendor/popper.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 
 <!-- Icons -->
 <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
 <script>
     feather.replace()
 </script>
-
-<!-- Graphs -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
-<script>
-    var ctx = document.getElementById("myChart");
+<script type="text/javascript">
+    var ctx = document.getElementById("chartjs_bar").getContext('2d');
     var myChart = new Chart(ctx, {
-        type: 'line',
+        type: 'bar',
         data: {
-            labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            labels:<?php echo json_encode($productname); ?>,
             datasets: [{
-                data: [15339, 21345, 18483, 24003, 23489, 24092, 28034],
-                lineTension: 0,
-                backgroundColor: 'transparent',
-                borderColor: '#ff5700',
-                borderWidth: 4,
-                pointBackgroundColor: '#ff2600'
+                backgroundColor: [
+                    "#5969ff",
+                    "#ff407b",
+                    "#25d5f2",
+                    "#ffc750",
+                    "#2ec551",
+                    "#7040fa",
+                    "#ff004e"
+                ],
+
+                data:<?php echo json_encode($stock); ?>,
             }]
         },
         options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: false
-                    }
-                }]
-            },
             legend: {
                 display: false,
-            }
+                position: 'bottom',
+
+                labels: {
+                    fontColor: '#71748d',
+                    fontFamily: 'Circular Std Book',
+                    fontSize: 14,
+                }
+            },
+
+
         }
     });
 </script>
+
 </body>
 </html>

@@ -90,7 +90,11 @@ require_once("dashboard-products.php");
     </div>
 </div>
 
-
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1 class="h2">Product List</h1>
+    </div>
+</main>
 
 
 <table class="table table-hover col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
@@ -279,11 +283,16 @@ require_once("dashboard-products.php");
     <!-- Add Product Modal end -->
 
     <!-- Search -->
-    <div class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-3">
-    <form action="dashboard-products.php" method="post">
-        Search <input type="text" name="search"><br>
-        <input type ="submit">
-    </form>
+    <div class="col-md-9 ml-sm-auto col-lg-10 pt-1 px-3">
+<!--    <form action="dashboard-products.php" method="post">-->
+<!--        Search <input type="text" name="search"><br>-->
+<!--        <input type ="submit">-->
+<!--    </form>-->
+        <form action="dashboard-products.php" method="post">
+        <label for="site-search">Search products:</label>
+        <input type="search" id="site-search" name="search"
+               aria-label="Search through site content">
+        <button>Search</button>
     </div>
 
 
@@ -323,7 +332,6 @@ if(isset($_POST['submit'])) {
     $sql = "INSERT INTO ProductInformation (product_name,product_price,product_image,product_size,product_quantity,product_description,product_enabled) VALUES ('$name','$price','$filename','$size','$quantity','$Str','$status')";
 
 
-
     if (mysqli_query($conn, $sql)) {
             $last_id = $conn->insert_id;
             echo '<script>alert("Product has been successfully added - refresh page to view changes")</script>';
@@ -344,7 +352,7 @@ if(isset($_POST['submit'])) {
 
 if(isset($_POST['search'])) {
     $searchText = $_POST['search'];
-    $sql = ("SELECT * FROM ProductInformation WHERE product_id LIKE '" . $searchText . "' OR product_name LIKE '" . $searchText . "' or product_description LIKE '" . $searchText . "' or product_price LIKE '" . $searchText . "' OR product_enabled LIKE '" . $searchText ."' ");
+    $sql = ("SELECT * FROM ProductInformation WHERE product_id LIKE '" . $searchText . "' OR product_name LIKE '" . $searchText . "' or product_description LIKE '" . $searchText . "' or product_size LIKE '" . $searchText . "' or product_price LIKE '" . $searchText . "' OR product_enabled LIKE '" . $searchText ."' ");
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
