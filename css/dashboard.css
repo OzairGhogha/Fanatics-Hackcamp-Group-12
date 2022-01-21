@@ -178,14 +178,26 @@ body {
 }
 
 .btn-primary{
-  color: #1a1919;
+  color: #ffffff;
   background-color: #ff5700;
   border-color: #1a1919;
   margin-left: 215px;
   margin-bottom: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "segoe ui", roboto, oxygen, ubuntu, cantarell, "fira sans", "droid sans", "helvetica neue", Arial, sans-serif;
 
 }
 .btn-primary:hover{
   background-color: #ff2600;
   border-color: #1a1919;
+}
+.btn-outline-dark{
+  background-color: #ff5700;
+  border-color: #1a1919;
+  border-width: 2.5px;
+  color: #ffffff;
+  margin-right: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "segoe ui", roboto, oxygen, ubuntu, cantarell, "fira sans", "droid sans", "helvetica neue", Arial, sans-serif;
+}
+.btn-outline-dark:hover{
+  background-color: #ff2600;
 }
