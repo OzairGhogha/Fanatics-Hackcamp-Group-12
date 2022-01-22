@@ -1,0 +1,102 @@
+<?php
+//$conn = mysqli_connect('poseidon.salford.ac.uk', 'agd743', 'Gorvi402', 'agd743_hackcamp');
+//$id = $_POST['preview_id'];
+//$query = "SELECT * FROM ProductInformation WHERE product_id = " . $id;
+//if ($result = $conn->query($query)) {
+//if ($result->num_rows > 0) {
+//
+//while ($row = $result->fetch_object()) {
+//
+//echo "<h1>" . $name = $row->product_name . "</h1>";
+//echo "<p>" . $row->product_description . "</p>";
+//echo "<img src=/images/" . $row->product_image . ' width=500px height="500px">';
+//
+//}
+//} else {
+//// if no records match the selected ID
+//echo "Nothing to see here...";
+//}
+//} else {
+//// if there's a problem with the query
+//echo "A slight problem with your query.";
+//}
+//
+
+$conn = mysqli_connect('poseidon.salford.ac.uk', 'agd743', 'Gorvi402', 'agd743_hackcamp');
+if (mysqli_connect_errno()) {
+    printf("Connect failed: %s\n", mysqli_connect_error());
+    exit();
+}
+$id = $_POST['preview_id'];
+$sql = "SELECT * FROM ProductInformation WHERE product_id = ". $id;
+
+if ($result = $conn->query($sql)) {
+    while ($row = $result->fetch_object()) {
+        $name = $row->product_name;
+        $price = $row->product_price;
+        $description =$row->product_description;
+        $image = $row->product_image;
+    }
+    $result->close();
+}
+else
+{
+    echo'something went wrong.';
+}
+?>
+<html lang="en">
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Product Preview</title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="container">
+    <div class="card">
+        <div class="container-fliud">
+            <div class="wrapper row">
+                <div class="preview col-md-6">
+
+                    <div class="preview-pic tab-content">
+                        <div class="tab-pane active" id="pic-1"> <?php echo "<img src=/images/" . $image . ' width=500px height="500px">'; ?> </div>
+
+                    </div>
+
+
+                </div>
+                <div class="details col-md-6">
+                    <h3 class="product-title"> <?php echo $name?></h3>
+
+                    <p class="product-description"> <?php echo $description ?></p>
+                    <h4 class="price">current price: <span> $ <?php echo $price ?> </span></h4>
+                    <h5 class="sizes">sizes:
+                        <span class="size" data-toggle="tooltip" title="xs">XS</span>
+                        <span class="size" data-toggle="tooltip" title="s">S</span>
+                        <span class="size" data-toggle="tooltip" title="m">M</span>
+                        <span class="size" data-toggle="tooltip" title="l">L</span>
+                        <span class="size" data-toggle="tooltip" title="xl">XL</span>
+                        <span class="size" data-toggle="tooltip" title="xxl">XXL</span>
+                    </h5>
+
+
+                    <div class="buttons d-flex flex-row">
+                        <button class="btn btn-success cart-button px-5"><span class="dot"></span>ADD TO CART</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>

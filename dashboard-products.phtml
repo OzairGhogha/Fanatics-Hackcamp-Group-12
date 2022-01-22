@@ -127,6 +127,42 @@ require_once("dashboard-products.php");
         <a href="#" data-toggle="modal" data-target="#status_product_modal" class="btn btn-primary btn-sm">Change Product Status</a>
     </div>
 
+    <div class="col-md-9 ml-sm-auto col-lg-3 pt-3 px-4">
+        <a href="#" data-toggle="modal" data-target="#preview_product_modal" class="btn btn-primary btn-sm">View Product Preview</a>
+    </div>
+
+    <!-- Preview Product Modal start -->
+    <form action = "dashboard-preview.php" method = "post" target="_blank">
+        <div class="modal fade" id="preview_product_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Preview Product</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="edit-product-form" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>Product ID</label>
+                                        <input type="text" name="preview_id" class="form-control" placeholder="Enter Product ID">
+                                    </div>
+                                </div>
+
+                                <input type="hidden" name="add_product" value="1">
+                                <input type="submit" class="btn btn-primary" name="submit5" value="Submit">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!-- Edit Product Modal end -->
+
     <!-- Status Product Modal start -->
     <form action = "dashboard-products.php" method = "post">
         <div class="modal fade" id="status_product_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -306,7 +342,15 @@ if (!isset($_POST['search'])) {
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            echo "<tr><td>" . $row["product_id"] . "</td><td>" . $row["product_name"] . "</td><td>" . $row["product_description"] . "</td><td>" . $row["product_size"] . "</td><td>" . "<img src=images/" . $row['product_image'] . ' width=100px height="100px">' . "</td><td>" . $row["product_quantity"] . "</td><td>" . $row["product_price"] . "</td><td>" . $row["product_enabled"] . "</td>";
+            echo "<tr><td>" . $row["product_id"] .
+                "</td><td>" . $row["product_name"] .
+                "</td><td>" . $row["product_description"] .
+                "</td><td>" . $row["product_size"] .
+                "</td><td>" . "<img src=images/" . $row['product_image'] . ' width=100px height="100px">' .
+                "</td><td>" . $row["product_quantity"] .
+                "</td><td>" . $row["product_price"] .
+                "</td><td>" . $row["product_enabled"] .
+                "</td>"  ;
         }
     } else {
         echo "No Results";
