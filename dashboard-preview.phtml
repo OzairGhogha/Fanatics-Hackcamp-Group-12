@@ -1,4 +1,7 @@
 <?php
+session_start();
+if(!isset($_SESSION['id']))
+    header("Location: ../login.php");
 //$conn = mysqli_connect('poseidon.salford.ac.uk', 'agd743', 'Gorvi402', 'agd743_hackcamp');
 //$id = $_POST['preview_id'];
 //$query = "SELECT * FROM ProductInformation WHERE product_id = " . $id;
