@@ -31,6 +31,9 @@ $id = $_POST['preview_id'];
 $sql = "SELECT * FROM ProductInformation WHERE product_id = ". $id;
 
 if ($result = $conn->query($sql)) {
+    $rowcount=mysqli_num_rows($result);
+    if ($rowcount > 0){
+
     while ($row = $result->fetch_object()) {
         $name = $row->product_name;
         $price = $row->product_price;
@@ -41,7 +44,10 @@ if ($result = $conn->query($sql)) {
 }
 else
 {
-    echo'something went wrong.';
+    echo '<script>alert("INVALID PRODUCT ID - YOU WILL BE REDIRECTED")</script>';
+    echo "<script>window.close();</script>";
+
+}
 }
 ?>
 <html lang="en">

@@ -99,7 +99,7 @@ if(!isset($_SESSION['id']))
 <!--            <canvas id="myChart" width="900" height="380"></canvas>-->
         <div class="col-auto">
             <h2 class="page-header" >Stock Levels</h2>
-            <h4 class="page-header" >Ordered by Lowest Stock</h4>
+            <h4 class="page-header" >Ordered by 10 Lowest Stock</h4>
              <canvas  id="chartjs_bar"></canvas>
         </div>
 
@@ -134,7 +134,7 @@ $result = $conn->query($sql);
         echo "No Results";
 
 }
-                $sql ="SELECT * FROM ProductInformation ORDER BY product_quantity ASC ";
+                $sql ="SELECT * FROM ProductInformation ORDER BY product_quantity ASC LIMIT 10";
                 $result = mysqli_query($conn,$sql);
                 $chart_data="";
                 while ($row = mysqli_fetch_array($result)) {
@@ -172,13 +172,17 @@ $result = $conn->query($sql);
             labels:<?php echo json_encode($productname); ?>,
             datasets: [{
                 backgroundColor: [
-                    "#5969ff",
-                    "#ff407b",
-                    "#25d5f2",
-                    "#ffc750",
-                    "#2ec551",
-                    "#7040fa",
-                    "#ff004e"
+                    "#ff0000",
+                    "#fe4400",
+                    "#f86600",
+                    "#ee8200",
+                    "#df9b00",
+                    "#cdb200",
+                    "#b6c700",
+                    "#99db00",
+                    "#70ed00",
+                    "#0bff00"
+
                 ],
 
                 data:<?php echo json_encode($stock); ?>,

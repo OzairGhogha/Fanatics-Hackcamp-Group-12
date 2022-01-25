@@ -91,8 +91,18 @@ require_once("dashboard-products.php");
 </div>
 
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 ">
         <h1 class="h2">Product List</h1>
+    </div>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1 class="h4">Total Unique Products: <?php $conn = mysqli_connect('poseidon.salford.ac.uk', 'agd743', 'Gorvi402', 'agd743_hackcamp');
+
+            $sql = "SELECT COUNT(DISTINCT product_name) FROM ProductInformation";
+
+            if ($result = $conn->query($sql)) {
+                $row = mysqli_fetch_assoc($result);
+                echo ($row['COUNT(DISTINCT product_name)']);
+            } ?></h1>
     </div>
 </main>
 
@@ -395,7 +405,7 @@ if(isset($_POST['submit'])) {
 
 if(isset($_POST['search'])) {
     $searchText = $_POST['search'];
-    $sql = ("SELECT * FROM ProductInformation WHERE product_id LIKE '" . $searchText . "' OR product_name LIKE '" . $searchText . "' or product_description LIKE '" . $searchText . "' or product_size LIKE '" . $searchText . "' or product_price LIKE '" . $searchText . "' OR product_enabled LIKE '" . $searchText ."' ");
+    $sql = ("SELECT * FROM ProductInformation WHERE product_id LIKE '" . $searchText . "' OR product_name LIKE '%" . $searchText . "%' or product_description LIKE '%" . $searchText . "%' or product_size LIKE '" . $searchText . "' or product_price LIKE '" . $searchText . "' OR product_enabled LIKE '" . $searchText ."' ");
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
@@ -461,7 +471,6 @@ if(isset($_POST['submit3']))
     </tbody>
     </table>
 </form>
-
 
 
 </body>
