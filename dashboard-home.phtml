@@ -124,7 +124,7 @@ if(!isset($_SESSION['id']))
 
 
 $conn = mysqli_connect('poseidon.salford.ac.uk','agd743','Gorvi402','agd743_hackcamp');
-$sql = ("SELECT * FROM ProductInformation ORDER BY product_quantity ASC ");
+$sql = ("SELECT * FROM ProductInformation ORDER BY product_quantity ASC LIMIT 10 ");
 $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
